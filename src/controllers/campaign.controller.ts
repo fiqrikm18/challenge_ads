@@ -1,6 +1,7 @@
 import { AxiosError } from "axios";
 import { Request, Response } from "express";
 import { createCampaign, getCampaign } from "../services/campaign.service";
+import { getInsight } from "../services/campaign.service";
 import { ApiError } from "../services";
 
 export default class CampaignController {

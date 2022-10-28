@@ -22,3 +22,8 @@ export const getCampaign = async () => {
   const response = await axios.get(`${baseUrl}/${adAccountId}/campaigns?access_token=${accessToken}&fields=['name', 'objective']`);
   return response;
 };
+
+export const getInsight = async (campaignId: string) => {
+  const response = await axios.get(`${baseUrl}/${campaignId}/insights?access_token=${accessToken}`);
+  return response;
+};
