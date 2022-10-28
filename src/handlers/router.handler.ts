@@ -5,6 +5,8 @@ export interface IRouterAds {
   path: string;
   method: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  middleware: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handler: any;
   // eslint-disable-next-line @typescript-eslint/no-extra-semi
 };
@@ -22,19 +24,24 @@ export default class Router {
     routers.forEach((router) => {
       switch (router.method) {
         case "GET":
-          this.app.get(router.path, router.handler);
+          if (router.middleware !== null) this.app.get(router.path, router.middleware, router.handler);
+          else this.app.get(router.path, router.handler);
           break;
         case "POST":
-          this.app.post(router.path, router.handler);
+          if (router.middleware !== null) this.app.post(router.path, router.middleware, router.handler);
+          else this.app.post(router.path, router.handler);
           break;
         case "PUT":
-          this.app.put(router.path, router.handler);
+          if (router.middleware !== null) this.app.put(router.path, router.middleware, router.handler);
+          else this.app.put(router.path, router.handler);
           break;
         case "PATCH":
-          this.app.patch(router.path, router.handler);
+          if (router.middleware !== null) this.app.patch(router.path, router.middleware, router.handler);
+          else this.app.patch(router.path, router.handler);
           break;
         case "DELETE":
-          this.app.delete(router.path, router.handler);
+          if (router.middleware !== null) this.app.delete(router.path, router.middleware, router.handler);
+          else this.app.delete(router.path, router.handler);
           break;
         default:
           this.app.all("405", (req: Request, res: Response) => {

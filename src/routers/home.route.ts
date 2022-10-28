@@ -8,6 +8,7 @@ export const indexRouter: IRouterAds[] = [
     name: "home",
     path: "/",
     method: "GET",
+    middleware: null,
     handler: homeController.index
   }
 ];
