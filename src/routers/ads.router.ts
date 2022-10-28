@@ -10,4 +10,10 @@ export const adsRouter: IRouterAds[] = [
     method: "POST",
     handler: adsController.createAds
   },
+  {
+    name: "get_ads_insights",
+    path: "/ads/insight/:ad_id",
+    method: "GET",
+    handler: adsController.getAdsInsight
+  },
 ];

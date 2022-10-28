@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { Request, Response } from "express";
-import { ApiError, createCampaign } from "../services/ads.service";
+import { ApiError, createCampaign, getCampaignInsigt } from "../services/ads.service";
 
 export default class AdsController {
   async createAds(req: Request, res: Response) {
@@ -17,6 +17,26 @@ export default class AdsController {
       });
     } catch (_e) {
       const error = _e as AxiosError;
+      return res.json({
+        "code": error.response?.status,
+        "msg": (error.response?.data as ApiError).error.error_user_msg ? (error.response?.data as ApiError).error.error_user_msg : error.message,
+        "data": {}
+      });
+    }
+  }
+
+  async getAdsInsight(req: Request, res: Response) {
+    const { ad_id } = req.params;
+
+    try {
+      const data = await (await getCampaignInsigt(ad_id)).data;
+      return res.json({
+        "code": 200,
+        "msg": "",
+        "data": data.data
+      });
+    } catch (e) {
+      const error = e as AxiosError;
       return res.json({
         "code": error.response?.status,
         "msg": (error.response?.data as ApiError).error.error_user_msg ? (error.response?.data as ApiError).error.error_user_msg : error.message,
