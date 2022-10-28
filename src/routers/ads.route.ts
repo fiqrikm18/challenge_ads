@@ -16,4 +16,22 @@ export const adsRouter: IRouterAds[] = [
     method: "GET",
     handler: adsController.getAdsSet
   },
+  {
+    name: "crete_ads",
+    path: "/ads/creative",
+    method: "GET",
+    handler: adsController.getCreativeAds
+  },
+  {
+    name: "crete_ads",
+    path: "/ads/",
+    method: "POST",
+    handler: adsController.createAds
+  },
+  {
+    name: "get_ads",
+    path: "/ads/:adset_id",
+    method: "GET",
+    handler: adsController.getAds
+  },
 ];

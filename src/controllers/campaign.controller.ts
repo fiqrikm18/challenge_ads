@@ -26,7 +26,7 @@ export default class CampaignController {
       const error = _e as AxiosError;
       return res.json({
         "code": error.response?.status,
-        "msg": (error.response?.data as ApiError).error.error_user_msg ? (error.response?.data as ApiError).error.error_user_msg : error.message,
+        "msg": (error.response?.data as ApiError).error.error_user_msg ? (error.response?.data as ApiError).error.error_user_msg : (error.response?.data as ApiError).error.message,
         "data": {}
       });
     }
@@ -44,7 +44,7 @@ export default class CampaignController {
       const error = _e as AxiosError;
       return res.json({
         "code": error.response?.status,
-        "msg": (error.response?.data as ApiError).error.error_user_msg ? (error.response?.data as ApiError).error.error_user_msg : error.message,
+        "msg": (error.response?.data as ApiError).error.error_user_msg ? (error.response?.data as ApiError).error.error_user_msg : (error.response?.data as ApiError).error.message,
         "data": {}
       });
     }
