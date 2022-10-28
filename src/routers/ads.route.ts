@@ -6,14 +6,14 @@ const adsController = new AdsController();
 export const adsRouter: IRouterAds[] = [
   {
     name: "create_ads",
-    path: "/ads/create",
+    path: "/ads/sets/create",
     method: "POST",
-    handler: adsController.createAds
+    handler: adsController.createAdsSet
   },
   {
-    name: "get_ads_insights",
-    path: "/ads/insight/:ad_id",
+    name: "get_ads_set",
+    path: "/ads/sets/",
     method: "GET",
-    handler: adsController.getAdsInsight
+    handler: adsController.getAdsSet
   },
 ];

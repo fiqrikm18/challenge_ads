@@ -1,39 +1,35 @@
 import axios from "axios";
-import dotenv from "dotenv";
+import { baseUrl, adAccountId, accessToken } from "./index";
+import moment from "moment";
 
-dotenv.config();
-
-const baseUrl = process.env.FACEBOOKADS_GRAPH_BASE_URL;
-const accessToken = process.env.FACEBOOKADS_ACCESS_TOKEN;
-const adAccountId = process.env.FACEBOOKADS_AD_ACCOUNT_ID;
-
-export interface ApiError {
-  error: AdsError
+export interface Ads {
+  name?: string;
+  lifetime_budget?: number;
+  start_time?: Date;
+  end_time?: Date;
+  campaign_id?: string;
+  bid_amount?: number;
+  billing_event?: string;
+  optimization_goal?: string;
+  targeting?: object;
 }
 
-interface AdsError {
-  message?: string;
-  type?: string;
-  code?: number;
-  error_data?: object;
-  error_subcode?: number;
-  is_transient?: boolean;
-  error_user_title?: string;
-  error_user_msg?: string;
-  fbtrace_id?: string;
-}
-
-export const createCampaign = async (name: string, objective: string, status: string, adCategory: []) => {
-  const response = await axios.post(`${baseUrl}/${adAccountId}/campaigns?access_token=${accessToken}`, {
-    "name": name,
-    "objective": objective,
-    "status": status,
-    "special_ad_categories": adCategory,
+export async function createAdsSet(data: Ads) {
+  const response = await axios.post(`${baseUrl}/${adAccountId}/adsets?access_token=${accessToken}`, {
+    "name": data.name,
+    "lifetime_budget": data.lifetime_budget,
+    "start_time": data.start_time,
+    "end_time": data.end_time ? data.end_time : moment().add(1, "days"),
+    "campaign_id": data.campaign_id,
+    "bid_amount": data.bid_amount,
+    "billing_event": data.billing_event,
+    "optimization_goal": data.optimization_goal,
+    "targeting": data.targeting,
   });
   return response;
-};
+}
 
-export const getCampaignInsigt = async (ad_id: string) => {
-  const response = await axios.get(`${baseUrl}/${ad_id}/insights?access_token=${accessToken}`);
+export async function getAdsSet() {
+  const response = await axios.get(`${baseUrl}/${adAccountId}/adsets?access_token=${accessToken}&fields=['name',"start_time","end_time","daily_budget","lifetime_budget"]`);
   return response;
-};
+}

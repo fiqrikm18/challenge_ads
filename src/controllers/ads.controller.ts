@@ -1,45 +1,56 @@
 import { AxiosError } from "axios";
+import { ApiError } from "../services";
 import { Request, Response } from "express";
-import { ApiError, createCampaign, getCampaignInsigt } from "../services/ads.service";
+import { createAdsSet, getAdsSet } from "../services/ads.service";
 
 export default class AdsController {
-  async createAds(req: Request, res: Response) {
-    const { campaign_name, campaign_objective, campaign_type, campaign_options } = req.body;
-
+  async createAdsSet(req: Request, res: Response) {
+    const { name, lifetime_budget, campaign_id, bid_amount } = req.body;
     try {
-      const data = await (await createCampaign(campaign_name, campaign_objective, campaign_type, campaign_options)).data;
+      const ads = await (await createAdsSet({
+        name: name,
+        lifetime_budget: lifetime_budget,
+        campaign_id: campaign_id,
+        bid_amount: bid_amount,
+        billing_event: "IMPRESSIONS",
+        optimization_goal: "POST_ENGAGEMENT",
+        targeting: {
+          geo_locations: {
+            countries: ["ID"]
+          }
+        }
+      })).data;
+
       return res.json({
         "code": 201,
-        "msg": "Campaign created",
+        "msg": "Ad Set created",
         "data": {
-          "campaign_id": data.id
+          "set_id": ads.id
         }
-      });
-    } catch (_e) {
-      const error = _e as AxiosError;
-      return res.json({
-        "code": error.response?.status,
-        "msg": (error.response?.data as ApiError).error.error_user_msg ? (error.response?.data as ApiError).error.error_user_msg : error.message,
-        "data": {}
-      });
-    }
-  }
-
-  async getAdsInsight(req: Request, res: Response) {
-    const { ad_id } = req.params;
-
-    try {
-      const data = await (await getCampaignInsigt(ad_id)).data;
-      return res.json({
-        "code": 200,
-        "msg": "",
-        "data": data.data
       });
     } catch (e) {
       const error = e as AxiosError;
       return res.json({
         "code": error.response?.status,
-        "msg": (error.response?.data as ApiError).error.error_user_msg ? (error.response?.data as ApiError).error.error_user_msg : error.message,
+        "msg": (error.response?.data as ApiError).error.error_user_msg ? (error.response?.data as ApiError).error.error_user_msg : (error.response?.data as ApiError).error.message,
+        "data": {}
+      });
+    }
+  }
+
+  async getAdsSet(req: Request, res: Response) {
+    try {
+      const ads = await (await getAdsSet()).data;
+      return res.json({
+        "code": 200,
+        "msg": "",
+        "data": ads.data
+      });
+    } catch (e) {
+      const error = e as AxiosError;
+      return res.json({
+        "code": error.response?.status,
+        "msg": (error.response?.data as ApiError).error.error_user_msg ? (error.response?.data as ApiError).error.error_user_msg : (error.response?.data as ApiError).error.message,
         "data": {}
       });
     }
